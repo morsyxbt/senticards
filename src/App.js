@@ -26,7 +26,8 @@ function shuffle(array) {
 }
 
 const getCardsForLevel = (level) => {
-  const pairs = 3 + (level - 1); // 3 pairs in level 1, increase each level
+  const maxPairs = CARD_IMAGES.length;
+  const pairs = Math.min(3 + (level - 1), maxPairs); // Never exceed available images
   let images = shuffle(CARD_IMAGES).slice(0, pairs); // Select random images for pairs
   // Ensure each image appears exactly twice
   const deck = [];
@@ -43,6 +44,7 @@ const getCardsForLevel = (level) => {
   }));
   return shuffled;
 };
+
 
 import StartScreen from './StartScreen';
 
