@@ -44,6 +44,8 @@ const getCardsForLevel = (level) => {
   return shuffled;
 };
 
+import StartScreen from './StartScreen';
+
 function App() {
   const [showEnd, setShowEnd] = useState(false);
   const [level, setLevel] = useState(1);
@@ -55,6 +57,7 @@ function App() {
   const [timer, setTimer] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [intervalId, setIntervalId] = useState(null);
+  const [showStart, setShowStart] = useState(true);
 
   let maxMoves = 12;
 if (level === 2) maxMoves = 15;
@@ -175,18 +178,21 @@ const handleCardClick = (idx) => {
     }
   };
 
+  if (showStart) {
+    return <StartScreen onStart={() => setShowStart(false)} />;
+  }
   return (
   <>
     <div className="app-container">
-      <h1>Flip The Cards <span role="img" aria-label="heart">💜</span></h1>
-      <h2>Level {level}</h2>
+      <h1 className="glow-title">Sentient Cards</h1>
+      <h2 style={{color:'#38BDF8'}}>Level {level}</h2>
       <div className="stats">
   <span>Moves Left: {maxMoves - moves}</span>
   <span>Time: {timer}s</span>
   <span className="scoreboard" style={{
     marginLeft: '1.2rem',
-    background: 'linear-gradient(90deg, #43e97b 0%, #38f9d7 100%)',
-    color: '#fff',
+    background: 'linear-gradient(135deg, #23272F 60%, #181A20 100%)',
+    color: '#FFD600', // yellow like timer
     borderRadius: '12px',
     padding: '0.45rem 1.4rem',
     fontWeight: 700,
@@ -194,7 +200,6 @@ const handleCardClick = (idx) => {
     boxShadow: '0 2px 10px rgba(67,233,123,0.13)',
     letterSpacing: '0.04em',
     fontFamily: 'Segoe UI, Arial, sans-serif',
-    border: '2px solid #b2f7ef',
     display: 'inline-block',
     minWidth: 80,
     textAlign: 'center',
@@ -209,7 +214,7 @@ const handleCardClick = (idx) => {
           >
             <div className="card-inner">
               <div className="card-front">
-  <img src={'/cards/irys.jpg'} alt="back" style={{width: '100%', height: '100%', objectFit: 'cover', borderRadius: '10px'}} />
+  <img src={'/cards/senti.jpg'} alt="back" style={{width: '100%', height: '100%', objectFit: 'cover', borderRadius: '10px'}} />
 </div>
               <div className="card-back">
                 <img src={card.img} alt="card" />
@@ -222,20 +227,24 @@ const handleCardClick = (idx) => {
         <div className="game-over">
           <h3 style={{
             fontWeight: 800,
-            color: '#111',
+            color: '#fff',
             fontSize: '2rem',
             letterSpacing: '0.04em',
             textShadow: '0 2px 12px rgba(67,233,123,0.13)',
             margin: '1.5rem 0 0.5rem 0',
             fontFamily: 'Segoe UI, Arial, sans-serif',
           }}>
-            Level Complete! Next Level...
+            completed - new level unlocked
           </h3>
         </div>
       )}
       {gameOver && showEnd && (
         <div className="fail-popup">
-          <h3 style={{fontWeight: 800, color: '#222', fontSize: '2rem'}}>Game Has Ended<br/>Thank you!</h3>
+          {level === 5 ? (
+  <h3 style={{fontWeight: 800, color: '#fff', fontSize: '2rem'}}>Game finished - nice played</h3>
+) : (
+  <h3 style={{fontWeight: 800, color: '#222', fontSize: '2rem'}}>Game Has Ended<br/>Thank you!</h3>
+)}
           <button className="restart-btn" onClick={() => { setShowEnd(false); resetGame(1); setLevel(1); setGameOver(false); }}>
             Play Again
           </button>
@@ -245,12 +254,12 @@ const handleCardClick = (idx) => {
   <div className="fail-popup premium-fail animate-fade-in">
     <div className="fail-popup-content">
       <img src="/cards/fail.jpg" alt="fail" />
-      <h3 style={{fontWeight: 800, color: '#d7263d', fontSize: '2rem', marginBottom: 8}}>
+      <h3 style={{fontWeight: 800, color: '#FFD600', fontSize: '2rem', marginBottom: 8}}>
         Level Failed!
       </h3>
-      <p style={{color: '#333', fontWeight: 500, marginBottom: 16, fontSize: '1.1rem'}}>Don't give up! Try again for a better score!</p>
+      <p style={{color: '#FFD600', fontWeight: 500, marginBottom: 16, fontSize: '1.1rem'}}>Don't give up! Try again for a better score!</p>
       <div style={{display: 'flex', gap: '1.2rem', justifyContent: 'center'}}>
-        <button className="restart-btn" onClick={() => resetGame(level)}>
+        <button className="restart-btn outline" onClick={() => resetGame(level)}>
           Restart Level
         </button>
         <button className="restart-btn outline" onClick={() => resetGame(1)}>
@@ -261,9 +270,10 @@ const handleCardClick = (idx) => {
   </div>
 )}
     <footer>
-      <a href="https://x.com/jafrin_jeneva" target="_blank" rel="noopener noreferrer">
-        Made with <span role="img" aria-label="heart">💜</span> by Jeneva
-      </a>
+      <span style={{color: '#fff', opacity: 0.7}}>Made with <span role="img" aria-label="heart">❤️</span> by </span>
+      <a className="footer-author" href="https://x.com/morsyxbt" target="_blank" rel="noopener noreferrer">Morsy</a>
+      <span style={{color: '#fff', opacity: 0.7}}>for</span>
+      <a className="footer-brand" href="https://x.com/SentientAGI" target="_blank" rel="noopener noreferrer">Sentient</a>
     </footer>
     </div>
   </>);
